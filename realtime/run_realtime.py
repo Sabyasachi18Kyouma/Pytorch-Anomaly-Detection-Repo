@@ -3,50 +3,14 @@ import os
 import time
 from datetime import datetime
 
-import torch
-
-from models.simply_model import SimpleClassifier
+from realtime.inference import load_model, predict_signal
 from realtime.Signal_stream import stream_signals
 from automation.state_machine import decide_state
 
 
-def load_model(model_path="models/simple_classifier.pth"):
-    """
-    Load trained PyTorch model from disk.
-    """
-
-    model = SimpleClassifier()
-    model.load_state_dict(torch.load(model_path, map_location="cpu"))
-    model.eval()
-
-    return model
-
-
-def predict_signal(model, signal):
-    """
-    Run inference on one incoming signal window.
-    """
-
-    signal_tensor = torch.tensor(signal, dtype=torch.float32)
-
-    # Add batch dimension: [100] -> [1, 100]
-    signal_tensor = signal_tensor.unsqueeze(0)
-
-    with torch.no_grad():
-        output = model(signal_tensor)
-
-        probabilities = torch.softmax(output, dim=1)
-
-        normal_probability = probabilities[0, 0].item()
-        anomaly_probability = probabilities[0, 1].item()
-
-        predicted_class = torch.argmax(probabilities, dim=1).item()
-
-    return predicted_class, normal_probability, anomaly_probability
-
 
 def main():
-    model = load_model()
+    model = load_model(model_type="cnn1d")
 
     log_path = "logs/realtime_log.csv"
     os.makedirs("logs", exist_ok=True)
