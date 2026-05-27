@@ -1,55 +1,79 @@
 # PyTorch-Based Real-Time Anomaly Detection and Automation System
 
-A learning-focused deep learning and software engineering project for building an anomaly detection system using PyTorch.
+A practical deep learning and software engineering project for real-time anomaly detection using PyTorch.
 
-The current version trains a neural network classifier on synthetic sensor signals and evaluates whether a new signal is normal or anomalous. The next development stage is to extend this into a real-time inference and automation system.
+This project starts with synthetic sensor signals, trains anomaly detection models, compares a baseline MLP with a 1D CNN, and connects the trained model to a real-time inference and automation pipeline.
 
 ---
 
 ## Project Goal
 
-The goal of this project is to build a practical PyTorch-based anomaly detection pipeline that gradually evolves from a simple training script into a real-time AI monitoring system.
+The goal of this project is to build a complete learning-focused AI system that goes beyond a basic training notebook.
 
-This project focuses on:
+The system is designed to:
 
-- Deep learning with PyTorch
-- Synthetic sensor signal generation
-- Time-series anomaly detection
-- Model training and evaluation
-- Real-time inference architecture
-- Automation logic for system response
-- Clean software engineering practices in Python
+- Generate synthetic sensor-like signals
+- Train PyTorch models for anomaly detection
+- Compare a baseline MLP with a 1D CNN
+- Simulate real-time sensor streaming
+- Perform live inference
+- Trigger automation states based on anomaly probability
+- Log runtime results and latency metrics
 
 ---
 
-## Current Project Status
+## Current Status
 
 ### Completed
 
 - Synthetic normal signal generation
 - Synthetic anomalous signal generation
-- PyTorch `Dataset` implementation
-- PyTorch `DataLoader` training pipeline
-- Simple neural network classifier
-- Training loop with loss and accuracy tracking
-- Model saving using `.pth` weights
-- Model evaluation on unseen generated signals
-- GitHub project setup
-
-### In Progress / Planned
-
+- PyTorch `Dataset` and `DataLoader`
+- Baseline MLP classifier
+- 1D CNN classifier for signal data
+- Model training scripts
+- Model evaluation scripts
+- MLP vs CNN comparison script
 - Real-time signal stream simulator
-- Live model inference loop
+- Live inference pipeline
 - Automation state machine
-- Logging of predictions and system states
-- 1D CNN model for time-series signals
-- Improved evaluation metrics such as precision, recall, F1-score, and confusion matrix
+- Runtime logging to CSV
+- Latency measurement
+- Final demo entry point using `main.py`
+
+### Planned Later
+
+- Real-world motor/bearing fault dataset
+- More advanced preprocessing
+- LSTM/GRU sequence model
+- Better visualization
+- Unit tests
+- Optional dashboard
 
 ---
 
-## Project Structure
+## System Architecture
 
 ```text
+Synthetic Signal Generator
+        ↓
+PyTorch Dataset / DataLoader
+        ↓
+MLP Baseline Model
+        ↓
+1D CNN Signal Model
+        ↓
+Saved Model Weights
+        ↓
+Real-Time Signal Stream
+        ↓
+Live Inference
+        ↓
+Automation State Machine
+        ↓
+CSV Logging + Runtime Metrics
+
+Project Structure
 Pytorch-Anomaly-Detection-Repo/
 │
 ├── data/
@@ -59,24 +83,36 @@ Pytorch-Anomaly-Detection-Repo/
 │
 ├── models/
 │   ├── __init__.py
-│   └── simple_model.py
+│   ├── simple_model.py
+│   └── cnn1d_model.py
 │
 ├── training/
 │   ├── __init__.py
 │   ├── train_simple.py
-│   └── evaluate_simple.py
+│   ├── evaluate_simple.py
+│   ├── train_cnn1d.py
+│   ├── evaluate_cnn1d.py
+│   └── compare_models.py
+│
+├── realtime/
+│   ├── __init__.py
+│   ├── signal_stream.py
+│   ├── inference.py
+│   └── run_realtime.py
+│
+├── automation/
+│   ├── __init__.py
+│   └── state_machine.py
 │
 ├── notebooks/
 │   ├── __init__.py
 │   ├── tensor_basics.py
 │   ├── test_model.py
-│   └── test_dataset.py
+│   ├── test_dataset.py
+│   ├── test_stream.py
+│   └── test_cnn1d_model.py
 │
-├── realtime/
-│   └── __init__.py
-│
-├── automation/
-│   └── __init__.py
+├── logs/
 │
 ├── utils/
 ├── tests/
@@ -85,3 +121,52 @@ Pytorch-Anomaly-Detection-Repo/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
+## Demo Output
+
+Starting real-time anomaly detection
+------------------------------------
+Model:        cnn1d
+Steps:        30
+Anomaly rate: 0.25
+Signal size:  100
+------------------------------------
+
+Step: 000 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 4.582 ms | Action: Continue normal operation
+Step: 001 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.802 ms | Action: Continue normal operation
+Step: 002 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.850 ms | Action: Continue normal operation
+Step: 003 | True: ANOMALY | Pred: ANOMALY | Anomaly Prob: 1.000 | State: SAFE_MODE | Latency: 1.015 ms | Action: Trigger safety shutdown procedure
+Step: 004 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.779 ms | Action: Continue normal operation
+Step: 005 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.885 ms | Action: Continue normal operation
+Step: 006 | True: ANOMALY | Pred: ANOMALY | Anomaly Prob: 1.000 | State: SAFE_MODE | Latency: 0.761 ms | Action: Trigger safety shutdown procedure
+Step: 007 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.198 ms | Action: Continue normal operation
+Step: 008 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.174 ms | Action: Continue normal operation
+Step: 009 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.870 ms | Action: Continue normal operation
+Step: 010 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.958 ms | Action: Continue normal operation
+Step: 011 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.326 ms | Action: Continue normal operation
+Step: 012 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.840 ms | Action: Continue normal operation
+Step: 013 | True: ANOMALY | Pred: ANOMALY | Anomaly Prob: 1.000 | State: SAFE_MODE | Latency: 1.126 ms | Action: Trigger safety shutdown procedure
+Step: 014 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.012 ms | Action: Continue normal operation
+Step: 015 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.824 ms | Action: Continue normal operation
+Step: 016 | True: ANOMALY | Pred: ANOMALY | Anomaly Prob: 1.000 | State: SAFE_MODE | Latency: 0.834 ms | Action: Trigger safety shutdown procedure
+Step: 017 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.857 ms | Action: Continue normal operation
+Step: 018 | True: ANOMALY | Pred: ANOMALY | Anomaly Prob: 1.000 | State: SAFE_MODE | Latency: 1.319 ms | Action: Trigger safety shutdown procedure
+Step: 019 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.976 ms | Action: Continue normal operation
+Step: 020 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.914 ms | Action: Continue normal operation
+Step: 021 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.103 ms | Action: Continue normal operation
+Step: 022 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.067 ms | Action: Continue normal operation
+Step: 023 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.806 ms | Action: Continue normal operation
+Step: 024 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.783 ms | Action: Continue normal operation
+Step: 025 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 1.177 ms | Action: Continue normal operation
+Step: 026 | True: ANOMALY | Pred: ANOMALY | Anomaly Prob: 1.000 | State: SAFE_MODE | Latency: 1.097 ms | Action: Trigger safety shutdown procedure
+Step: 027 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.771 ms | Action: Continue normal operation
+Step: 028 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.958 ms | Action: Continue normal operation
+Step: 029 | True: NORMAL  | Pred: NORMAL  | Anomaly Prob: 0.000 | State: NORMAL    | Latency: 0.976 ms | Action: Continue normal operation
+
+Real-time run summary
+---------------------
+Total samples:        30
+Accuracy:             1.000
+Anomaly recall:       1.000
+False alarm rate:     0.000
+Average latency:      1.088 ms
