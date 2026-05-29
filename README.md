@@ -41,6 +41,18 @@ The system is designed to:
 - Latency measurement
 - Final demo entry point using `main.py`
 
+## Local LLM Incident Report Generation
+
+This project includes an optional local LLM reporting layer using Ollama.
+
+After running the real-time anomaly detection demo:
+
+```bash
+python main.py
+
+generate a local incident report with: python -m llm.local_report_generator
+
+
 ### Planned Later
 
 - Real-world motor/bearing fault dataset
