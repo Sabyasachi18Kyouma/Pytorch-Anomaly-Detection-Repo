@@ -50,7 +50,12 @@ After running the real-time anomaly detection demo:
 ```bash
 python main.py
 
-generate a local incident report with: python -m llm.local_report_generator
+generate a local incident report with the command:
+
+```bash
+ python -m llm.local_report_generator
+
+This generates a report inside the report folder.
 
 
 ### Planned Later
@@ -66,73 +71,91 @@ generate a local incident report with: python -m llm.local_report_generator
 
 ## System Architecture
 
+The project is organized as a modular real-time anomaly detection and automation pipeline with an optional local LLM-assisted reporting layer.
+
 ```text
 Synthetic Signal Generator
         ↓
 PyTorch Dataset / DataLoader
         ↓
-MLP Baseline Model
-        ↓
-1D CNN Signal Model
+Model Training
+        ├── Baseline MLP Classifier
+        └── 1D CNN Signal Classifier
         ↓
 Saved Model Weights
         ↓
 Real-Time Signal Stream
         ↓
-Live Inference
+Live PyTorch Inference
+        ↓
+Anomaly Probability Estimation
         ↓
 Automation State Machine
+        ├── NORMAL
+        ├── WARNING
+        ├── CRITICAL
+        └── SAFE_MODE
         ↓
-CSV Logging + Runtime Metrics
+CSV Runtime Logging
+        ↓
+Local LLM Incident Report Generator
+        ↓
+Markdown Engineering Report
+```
 
-Project Structure
-Pytorch-Anomaly-Detection-Repo/
-│
-├── data/
-│   ├── __init__.py
-│   ├── generate_data.py
-│   └── synthetic_dataset.py
-│
-├── models/
-│   ├── __init__.py
-│   ├── simple_model.py
-│   └── cnn1d_model.py
-│
-├── training/
-│   ├── __init__.py
-│   ├── train_simple.py
-│   ├── evaluate_simple.py
-│   ├── train_cnn1d.py
-│   ├── evaluate_cnn1d.py
-│   └── compare_models.py
-│
-├── realtime/
-│   ├── __init__.py
-│   ├── signal_stream.py
-│   ├── inference.py
-│   └── run_realtime.py
-│
-├── automation/
-│   ├── __init__.py
-│   └── state_machine.py
-│
-├── notebooks/
-│   ├── __init__.py
-│   ├── tensor_basics.py
-│   ├── test_model.py
-│   ├── test_dataset.py
-│   ├── test_stream.py
-│   └── test_cnn1d_model.py
-│
-├── logs/
-│
-├── utils/
-├── tests/
-│
-├── main.py
-├── requirements.txt
-├── .gitignore
-└── README.md
+### Runtime Flow
+
+During the real-time demo, the system performs the following steps:
+
+```text
+python main.py
+        ↓
+Load trained CNN model
+        ↓
+Generate synthetic live signal windows
+        ↓
+Run real-time anomaly prediction
+        ↓
+Compute anomaly probability
+        ↓
+Trigger automation state
+        ↓
+Log predictions, states, actions, and latency
+        ↓
+Save runtime log to CSV
+```
+
+The runtime log is saved as:
+
+```text
+logs/realtime_log_cnn1d.csv
+```
+
+### Local LLM Reporting Flow
+
+After the real-time demo, the optional local LLM layer can generate a human-readable incident report.
+
+```text
+python -m llm.local_report_generator
+        ↓
+Read runtime CSV log
+        ↓
+Compute summary statistics
+        ↓
+Send structured summary to local Ollama model
+        ↓
+Generate Markdown incident report
+        ↓
+Save report locally
+```
+
+The generated report is saved as:
+
+```text
+reports/local_incident_report.md
+```
+
+This LLM reporting layer runs locally using Ollama and does not require a paid API key.
 
 ## Demo Output
 
